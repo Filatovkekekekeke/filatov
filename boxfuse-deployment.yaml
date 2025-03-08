@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: boxfuse-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: boxfuse
+  template:
+    metadata:
+      labels:
+        app: boxfuse
+    spec:
+      imagePullSecrets:
+      - name: my-registry-secret
+      containers:
+      - name: boxfuse-container
+        image: 158.160.90.218:5000/repository/repka/boxfuse:1.0
+        ports:
+        - containerPort: 80

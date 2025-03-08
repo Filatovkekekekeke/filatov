@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  jenkins:
+    build: . 
+    container_name: jenkins
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - /data/boxfuse-sample-java-war-hello:/data/boxfuse-sample-java-war-hello
+      - /var/run/docker.sock:/var/run/docker.sock
+    user: root
+    networks:
+      - jenkins-network
+
+  maven:
+    image: maven:3.8.6-openjdk-11
+    container_name: maven_builder
+    working_dir: /app
+    volumes:
+      - /data/boxfuse-sample-java-war-hello:/app
+    command: ["tail", "-f", "/dev/null"]
+    networks:
+      - jenkins-network
+
+volumes:
+  jenkins_home:
+
+networks:
+  jenkins-network:
+    driver: bridge
